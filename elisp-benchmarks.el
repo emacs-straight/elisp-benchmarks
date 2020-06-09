@@ -1,10 +1,10 @@
 ;;; elisp-benchmarks.el --- elisp benchmarks collection -*- lexical-binding:t -*-
 
-;; Copyright (C) 2019  Free Software Foundation, Inc.
+;; Copyright (C) 2019-2020  Free Software Foundation, Inc.
 
 ;; Author: Andrea Corallo <akrl@sdf.org>
 ;; Maintainer: Andrea Corallo <akrl@sdf.org>
-;; Version: 1.5
+;; Version: 1.6
 ;; Keywords: languages, lisp
 ;; Package-Type: multi
 ;; Created: 2019-01-12
@@ -90,7 +90,7 @@ RECOMPILE all the benchmark folder when non nil."
 				       #'native-compile
 				     #'byte-compile-file)
 	   with res = (make-hash-table :test #'equal)
-	   with sources = (directory-files elb-bench-directory t "\\.el$")
+	   with sources = (directory-files elb-bench-directory t "\\.el\\'")
 	   with tests = (if selector
 			    (cl-loop for f in sources
 				     when (string-match selector f)
