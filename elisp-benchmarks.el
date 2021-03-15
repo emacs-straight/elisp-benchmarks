@@ -4,7 +4,7 @@
 
 ;; Author: Andrea Corallo <akrl@sdf.org>
 ;; Maintainer: Andrea Corallo <akrl@sdf.org>
-;; Version: 1.9
+;; Version: 1.10
 ;; Keywords: languages, lisp
 ;; Package-Type: multi
 ;; Created: 2019-01-12
@@ -97,9 +97,6 @@ RECOMPILE all the benchmark folder when non nil."
 				       collect (file-name-base f))
 			  (mapcar #'file-name-base sources))
 	   initially
-	   (when native-comp
-	     (require 'comp)
-	     (setf comp-speed 3))
 	   ;; Compile
 	   (when recompile
 	     (mapc (lambda (f)

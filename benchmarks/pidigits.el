@@ -46,6 +46,7 @@
 	  elb-num (* elb-num k))))
 
 (defun elb-pidigits (x)
+  (declare (speed 2))
   (let ((elb-acc 0)
 	(elb-den 1)
 	(elb-num 1)
@@ -69,3 +70,7 @@
 	   do (elb-pidigits 500)))
 
 (provide 'elb-pidigits)
+
+;; Local Variables:
+;; comp-speed: 3
+;; End:
