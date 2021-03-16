@@ -4,7 +4,7 @@
 
 ;; Author: Andrea Corallo <akrl@sdf.org>
 ;; Maintainer: Andrea Corallo <akrl@sdf.org>
-;; Version: 1.10
+;; Version: 1.11
 ;; Keywords: languages, lisp
 ;; Package-Type: multi
 ;; Created: 2019-01-12
@@ -46,6 +46,9 @@
 (require 'benchmark)
 (require 'outline)
 (require 'org)
+(if (featurep 'nativecomp)
+    (require 'comp)
+  (defvar comp-speed))
 
 (defgroup elb nil
   "Emacs Lisp benchmarks."
@@ -54,7 +57,12 @@
 (defcustom elb-runs 3
   "Total number of benchmark iterations."
   :type 'number
-  :group 'comp)
+  :group 'elb)
+
+(defcustom elb-speed 3
+  "Default `comp-speed' to be used for native compiling the benchmarks."
+  :type 'number
+  :group 'elb)
 
 (defconst elb-bench-directory
   (concat (file-name-directory (or load-file-name buffer-file-name))
@@ -85,8 +93,8 @@ RECOMPILE all the benchmark folder when non nil."
 	   repeat runs
 	   for i from 1
 	   named test-loop
-	   with native-comp = (featurep 'nativecomp)
-	   with compile-function = (if native-comp
+	   with comp-speed = elb-speed
+	   with compile-function = (if (featurep 'nativecomp)
 				       #'native-compile
 				     #'byte-compile-file)
 	   with res = (make-hash-table :test #'equal)
@@ -104,7 +112,7 @@ RECOMPILE all the benchmark folder when non nil."
 		     (funcall compile-function f))
 		   sources))
 	   ;; Load
-	   (mapc #'load (mapcar (if native-comp
+	   (mapc #'load (mapcar (if (featurep 'nativecomp)
 				    #'comp-el-to-eln-filename
 				  #'file-name-sans-extension)
 				sources))
