@@ -4,7 +4,7 @@
 
 ;; Author: Andrea Corallo <akrl@sdf.org>
 ;; Maintainer: Andrea Corallo <akrl@sdf.org>
-;; Version: 1.11
+;; Version: 1.12
 ;; Keywords: languages, lisp
 ;; Package-Type: multi
 ;; Created: 2019-01-12
@@ -46,9 +46,9 @@
 (require 'benchmark)
 (require 'outline)
 (require 'org)
-(if (featurep 'nativecomp)
+(if (featurep 'native-compile)
     (require 'comp)
-  (defvar comp-speed))
+  (defvar native-comp-speed))
 
 (defgroup elb nil
   "Emacs Lisp benchmarks."
@@ -60,7 +60,7 @@
   :group 'elb)
 
 (defcustom elb-speed 3
-  "Default `comp-speed' to be used for native compiling the benchmarks."
+  "Default `native-comp-speed' to be used for native compiling the benchmarks."
   :type 'number
   :group 'elb)
 
@@ -91,7 +91,7 @@ RECOMPILE all the benchmark folder when non nil."
   (interactive
    (when current-prefix-arg
      (list (read-regexp "Run benchmark matching: "))))
-  (let* ((comp-speed elb-speed)
+  (let* ((native-comp-speed elb-speed)
 	 (compile-function (if (fboundp 'native-compile)
 			       #'native-compile
 			     #'byte-compile-file))
@@ -109,7 +109,7 @@ RECOMPILE all the benchmark folder when non nil."
 	      (funcall compile-function f))
 	    test-sources))
     ;; Load
-    (mapc #'load (mapcar (if (and (featurep 'nativecomp)
+    (mapc #'load (mapcar (if (and (featurep 'native-compile)
 				  (fboundp 'comp-el-to-eln-filename))
 			     ;; FIXME: Isn't the elc->eln
                              ;; remapping fully automatic?
